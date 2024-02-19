@@ -1,11 +1,10 @@
 package com.mski.spring.jv.demo.model;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -17,24 +16,19 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "stock")
-public class Stock {
+public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false)
-    private String name;
+    @OneToMany(mappedBy = "cart", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    private Set<CartItem> cartItemList = new HashSet<>();
 
-    @Enumerated
-    private Set<Restrictions> restrictions = Set.of(Restrictions.UNRESTRICTED);
-
-    @Column(nullable = false)
-    private BigDecimal price;
-
-    public enum Restrictions {
-        UNRESTRICTED, ALCOHOL, TOBACCO
+    public Cart add(CartItem cartItem) {
+        cartItem.setCart(this);
+        cartItemList.add(cartItem);
+        return this;
     }
 
     @Override
@@ -44,8 +38,8 @@ public class Stock {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Stock stock = (Stock) o;
-        return getId() != null && Objects.equals(getId(), stock.getId());
+        Cart cart = (Cart) o;
+        return getId() != null && Objects.equals(getId(), cart.getId());
     }
 
     @Override
@@ -53,7 +47,3 @@ public class Stock {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }
-
-
-
-

@@ -1,35 +1,38 @@
 package com.mski.spring.jv.demo;
 
-import com.mski.spring.jv.demo.model.Stock;
-import com.mski.spring.jv.demo.repository.StockRepository;
+import com.mski.spring.jv.demo.model.Cart;
+import com.mski.spring.jv.demo.repository.CartRepository;
+import com.mski.spring.jv.demo.service.CartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Slf4j
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
 
-	@Autowired
-	private StockRepository stockRepository;
+    @Autowired
+    private CartService cartService;
 
-	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
-	}
+    @Autowired
+    private CartRepository cartRepository;
 
-	@Override
-	public void run(String... args) throws Exception {
-		log.info("run Hook");
-		stockRepository.save(new Stock(null, "Milk", new HashSet<>()));
-		stockRepository.save(new Stock(null, "Wine", Set.of(Stock.Restrictions.ALCOHOL)));
-		stockRepository.save(new Stock(null, "Smokey Wine", Set.of(Stock.Restrictions.TOBACCO, Stock.Restrictions.ALCOHOL)));
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
 
-		log.info("Stock: {}", stockRepository.findByName("Wine"));
-		log.info("Stock: {}", stockRepository.findByName("Smokey Wine"));
-	}
+    @Override
+    public void run(String... args) throws Exception {
+        log.info("run Hook");
+        Cart cart = cartRepository.findAll().getFirst();
+
+        log.info("Cart before add {}", cart);
+
+        cartService.addItem(cart, "Milk", 1);
+
+        cart = cartRepository.findAll().getFirst();
+        log.info("Cart after add {}", cart);
+    }
 }
