@@ -2,41 +2,37 @@ package com.mski.spring.jv.demo.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
 @Setter
 @ToString
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"stock_id", "cart_id"})})
-public class CartItem {
+@AllArgsConstructor
+@Entity(name = "transaction")
+public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "stock_id")
-    private Stock stock;
+    @ManyToOne(optional = false)
+    private Customer customer;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
-    @ToString.Exclude
-    private Cart cart;
+    @OneToMany(mappedBy = "transaction", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    private Set<SoldItem> soldItemList = new HashSet<>();
 
-    @Column(nullable = false)
-    private Integer quantity;
-
-    @Column
-    private BigDecimal priceAtSale;
+    public Transaction add(SoldItem soldItem) {
+        soldItem.setTransaction(this);
+        soldItemList.add(soldItem);
+        return this;
+    }
 
     @Override
     public final boolean equals(Object o) {
@@ -45,12 +41,12 @@ public class CartItem {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        CartItem cartItem = (CartItem) o;
-        return getId() != null && Objects.equals(getId(), cartItem.getId());
+        Transaction transaction = (Transaction) o;
+        return getId() != null && Objects.equals(getId(), transaction.getId());
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(getId());
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

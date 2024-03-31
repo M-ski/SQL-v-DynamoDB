@@ -8,13 +8,13 @@ import java.util.UUID;
 
 @Data
 @Embeddable
-public class CartItemId implements Serializable {
+public class SoldItemId implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "stock_id")
     private UUID stockId;
 
     @ManyToOne
-    @JoinColumn(name = "cart_id")
-    private UUID cartId;
+    @JoinColumn(name = "sold_item_id")
+    private UUID soldItemId;
 }

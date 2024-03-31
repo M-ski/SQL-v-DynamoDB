@@ -13,7 +13,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @NoArgsConstructor
-@Entity
+@Entity(name = "locks")
 public class Lock {
 
     @Id

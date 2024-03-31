@@ -1,8 +1,8 @@
 package com.mski.spring.jv.demo;
 
-import com.mski.spring.jv.demo.model.Cart;
-import com.mski.spring.jv.demo.repository.CartRepository;
-import com.mski.spring.jv.demo.service.CartService;
+import com.mski.spring.jv.demo.model.Transaction;
+import com.mski.spring.jv.demo.repository.TransactionRepository;
+import com.mski.spring.jv.demo.service.SalesTransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -14,10 +14,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DemoApplication implements CommandLineRunner {
 
     @Autowired
-    private CartService cartService;
+    private SalesTransactionService salesTransactionService;
 
     @Autowired
-    private CartRepository cartRepository;
+    private TransactionRepository transactionRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
@@ -26,13 +26,13 @@ public class DemoApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("run Hook");
-        Cart cart = cartRepository.findAll().getFirst();
+        Transaction transaction = transactionRepository.findAll().getFirst();
 
-        log.info("Cart before add {}", cart);
+        log.info("Cart before add {}", transaction);
 
-        cartService.addItem(cart, "Milk", 1);
+        salesTransactionService.addItem(transaction, "Milk", 1);
 
-        cart = cartRepository.findAll().getFirst();
-        log.info("Cart after add {}", cart);
+        transaction = transactionRepository.findAll().getFirst();
+        log.info("Cart after add {}", transaction);
     }
 }
