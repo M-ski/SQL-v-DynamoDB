@@ -2,7 +2,6 @@ package com.mski.spring.jv.jdbc.repository;
 
 import com.mski.spring.jv.jdbc.SalesTransactionService;
 import com.mski.spring.jv.jdbc.model.*;
-import com.mski.spring.jv.jdbc.model.dto.TransactionDTO;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -10,9 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
