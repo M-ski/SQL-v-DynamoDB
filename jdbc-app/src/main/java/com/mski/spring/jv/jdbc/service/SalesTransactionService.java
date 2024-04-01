@@ -1,4 +1,4 @@
-package com.mski.spring.jv.jdbc;
+package com.mski.spring.jv.jdbc.service;
 
 import com.mski.spring.jv.jdbc.model.Currency;
 import com.mski.spring.jv.jdbc.model.Customer;
@@ -30,7 +30,7 @@ public class SalesTransactionService {
     public void sellItems(Customer customer, Collection<SoldItem> items) {
 
         int totalMinorUnits = 0;
-        for (SoldItem soldItem : items) {dd
+        for (SoldItem soldItem : items) {
             totalMinorUnits += soldItem.quantity() * soldItem.stock().price().amountInMinorUnits();
         }
 

@@ -35,7 +35,7 @@ public class StockRepository {
     }
 
     public void decreaseQuantities(Collection<SoldItem> soldItems) {
-        Map<String, Object>[] updates = new HashMap[soldItems.size()];
+        Map<String, Object>[] updates = new Map[soldItems.size()];
 
         Iterator<SoldItem> iterator = soldItems.iterator();
         for(int i = 0; i < soldItems.size(); i++) {

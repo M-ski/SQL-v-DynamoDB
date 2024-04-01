@@ -1,6 +1,6 @@
 package com.mski.spring.jv.jdbc.repository;
 
-import com.mski.spring.jv.jdbc.SalesTransactionService;
+import com.mski.spring.jv.jdbc.service.SalesTransactionService;
 import com.mski.spring.jv.jdbc.model.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
