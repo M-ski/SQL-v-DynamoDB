@@ -1,0 +1,6 @@
+USE shopping_jdbc;
+
+DROP TABLE IF EXISTS sold_items;
+DROP TABLE IF EXISTS sales;
+DROP TABLE IF EXISTS customers;
+DROP TABLE IF EXISTS stock;
