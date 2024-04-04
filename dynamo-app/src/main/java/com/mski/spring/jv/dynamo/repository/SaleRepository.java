@@ -70,11 +70,7 @@ public class SaleRepository {
                         .build())
                 .build()));
 
-        TransactWriteItemsEnhancedRequest build = requestBuilder.build();
-
-        log.info("Transact write: {}", build.transactWriteItems());
-
-        dynamoDbEnhancedClient.transactWriteItems(build);
+        dynamoDbEnhancedClient.transactWriteItems(requestBuilder.build());
     }
 
     public SaleDTO getSale(String saleId) {
