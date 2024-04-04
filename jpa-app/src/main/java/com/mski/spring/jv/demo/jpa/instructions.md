@@ -7,7 +7,7 @@ exercise without considering design aspects.
 
 Requirements
 
-The following requirements are presented in order of importance, so you should ensure the
+The following requirements are presented in sale of importance, so you should ensure the
 current requirement is implemented, before moving on with the next one.
 Completing the list is not required to pass the interview, so focus on domain modelling, rather than worrying about hurrying up.
 Ideally, we would like to witness compiling piece of code.

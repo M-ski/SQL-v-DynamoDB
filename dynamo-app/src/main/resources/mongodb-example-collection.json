@@ -1,0 +1,41 @@
+// example user collection
+[
+  {
+    "id": "624a48ef-3735-4e69-a8d3-07b6ac20a8d7",
+    "name": "Alex",
+    "email": "Alex@yahoo.com"
+  },
+  {
+    "id": "ec9eab9d-2024-4173-867a-ebf9a1c758cd",
+    "name": "Bob",
+    "email": "bob@gmail.com"
+  }
+]
+
+// example purchase collection
+[
+  {
+    "id": "44d907e8-0a66-4856-9403-d951bafe1ac8",
+    "customer": {
+      "id": "624a48ef-3735-4e69-a8d3-07b6ac20a8d7",
+      "name": "Alex",
+      "email": "Alex@yahoo.com"
+    },
+    "when": "2024-04-01 16:42:33",
+    "totalPriceMinorUnits": 288,
+    "itemsAndQuantity": [
+      {
+        "id": "377aaa85-3a1d-4d92-8c2d-45bace1eb77b",
+        "name": "Milk",
+        "priceMinorUnits": 110,
+        "quantity": 1
+      },
+      {
+        "id": "fd4a6a57-209d-4150-87ce-38b237eb8836",
+        "name": "Sugar",
+        "priceMinorUnits": 89,
+        "quantity": 2
+      }
+    ]
+  }
+]

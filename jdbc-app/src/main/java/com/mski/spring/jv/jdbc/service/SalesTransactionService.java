@@ -28,23 +28,32 @@ public class SalesTransactionService {
 
     @Transactional
     public void sellItems(Customer customer, Collection<SoldItem> items) {
+        // get the total purchase cost of the items
+        int totalMinorUnits = getTotalPurchaseCost(items);
+        // construct a sale object (a sale with multiple purchased items)
+        SaleTransactionDTO saleTransactionDTO = getSaleTransactionDTO(customer, items, totalMinorUnits);
 
+        // then try to decrease stock first before confirming the sale - in case we run out of something
+        stockRepository.decreaseQuantities(items);
+        // finally save the new sale
+        salesRepository.saveTransaction(saleTransactionDTO);
+    }
+
+    private static int getTotalPurchaseCost(Collection<SoldItem> items) {
         int totalMinorUnits = 0;
         for (SoldItem soldItem : items) {
             totalMinorUnits += soldItem.quantity() * soldItem.stock().price().amountInMinorUnits();
         }
+        return totalMinorUnits;
+    }
 
-        SaleTransactionDTO saleTransactionDTO = new SaleTransactionDTO(
+    private static SaleTransactionDTO getSaleTransactionDTO(Customer customer, Collection<SoldItem> items, int totalMinorUnits) {
+        return new SaleTransactionDTO(
                 UUID.randomUUID().toString(),
                 customer.id(),
                 LocalDateTime.now(),
                 new MinorUnits(totalMinorUnits, Currency.GBP),
                 items
         );
-
-        // try to decrease stock first before confirming the sale - in case we run out of something
-        stockRepository.decreaseQuantities(items);
-        // then save the new sale
-        salesRepository.saveTransaction(saleTransactionDTO);
     }
 }

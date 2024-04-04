@@ -1,0 +1,23 @@
+{
+  "TransactItems": [
+    {
+      "Put": {
+        "Item": { "PK": "STOCK#abc", "SK": "SALE#abc", "totalPrice": 2.89 },
+        "TableName": "SHOP"
+      }
+    },
+    {
+      "Update": {
+        "Key": { "PK": "STOCK#abc", "SK": "STOCK#abc" },
+        "UpdateExpression": "SET quantity = quantity - :val",
+        "ExpressionAttributeValues": { "val": 3 },
+        "TableName": "SHOP"
+      },
+      "ConditionCheck": {
+        "ConditionExpression": "quantity >= :val",
+        "Key": { "PK": "STOCK#abc", "SK": "STOCK#abc" },
+        "TableName": "SHOP"
+      }
+    }
+  ]
+}

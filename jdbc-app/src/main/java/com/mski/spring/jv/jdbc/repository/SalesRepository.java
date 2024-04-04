@@ -17,20 +17,7 @@ public class SalesRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Transactional
-    public void saveTransaction(SaleTransactionDTO saleTransactionDTO) {
-        jdbcTemplate.update("""
-                INSERT INTO sales VALUES (:id, :customer_id, :when, :total_price_minor_units, :total_price_minor_units)
-                ON DUPLICATE KEY UPDATE customer_id=:customer_id, `when`=:when,
-                                        total_price_minor_units=:total_price_minor_units, total_price_ccy=:total_price_ccy
-                """, Map.of(
-                "id", saleTransactionDTO.id(),
-                "customer_id", saleTransactionDTO.customerId(),
-                "when", saleTransactionDTO.when(),
-                "total_price_minor_units", saleTransactionDTO.total().amountInMinorUnits(),
-                "total_price_ccy", saleTransactionDTO.total().currency().name())
-        );
-
+    private static Map<String, Object>[] getSoldItemsAsKeyValueMaps(SaleTransactionDTO saleTransactionDTO) {
         Map<String, Object>[] soldItemsValues = new Map[saleTransactionDTO.items().size()];
         int tracker = 0;
 
@@ -41,7 +28,26 @@ public class SalesRepository {
                     "quantity", item.quantity()
             );
         }
+        return soldItemsValues;
+    }
 
+    @Transactional
+    public void saveTransaction(SaleTransactionDTO saleTransactionDTO) {
+        // first update the sales table with the new sale
+        jdbcTemplate.update("""
+                INSERT INTO sales VALUES (:id, :customer_id, :when, :total_price_minor_units, :total_price_minor_units)
+                ON DUPLICATE KEY UPDATE customer_id=:customer_id, `when`=:when,
+                                        total_price_minor_units=:total_price_minor_units, total_price_ccy=:total_price_ccy
+                """, Map.of(
+                "id", saleTransactionDTO.id(),
+                "customer_id", saleTransactionDTO.customerId(),
+                "when", saleTransactionDTO.when(),
+                "total_price_minor_units", saleTransactionDTO.total().amountInMinorUnits(),
+                "total_price_ccy", saleTransactionDTO.total().currency().name()
+        ));
+
+        // then for each sold item, add a row to the sold_items table
+        Map<String, Object>[] soldItemsValues = getSoldItemsAsKeyValueMaps(saleTransactionDTO);
         jdbcTemplate.batchUpdate("""
                 INSERT INTO sold_items VALUES(:sale_id, :stock_id, :quantity)
                 ON DUPLICATE KEY UPDATE sale_id=:sale_id, stock_id=:stock_id, quantity=:quantity
